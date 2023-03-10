@@ -175,14 +175,14 @@ local STRING_TYPE = 'string';
 
     "test:all": t.Task('test:all')
       .WithCmds([
-        t.CmdTask($.tasks['test:%s' % [t]].name_)
-        for t in testTypes
+        t.CmdTask($.tasks['test:' + testType].name_),
+        for testType in testTypes
       ])
     ,
     "test:all:ci": t.Task('test:all:ci')
       .WithCmds([
-        t.CmdTask($.tasks['test:%s:ci' % [t]].name_)
-        for t in testTypes
+        t.CmdTask($.tasks['test:%s:ci' % [testType]].name_),
+        for testType in testTypes
       ])
     ,
     "test:bench": t.Task('test:bench')
