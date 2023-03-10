@@ -10,6 +10,12 @@ local STRING_TYPE = 'string';
 //    'go run %s' % [name],
 
   config_:: {
+    project: {
+      name: error "project.name required",
+      owner: error "project.repoOwner required",
+      repoShort: std.join("/", [self.owner, self.name]),
+      repoLong: std.join("/", ["github.com", self.repoShort]),
+    },
     tools: {
       local tools = self,
 
@@ -23,12 +29,12 @@ local STRING_TYPE = 'string';
   version: '3',
   env: {
     GO111MODULE: 'true',
-    GOPRIVATE: 'github.com/ghostsquad',
+    GOPRIVATE: std.join("/", ["github.com", $.config_.project.owner]),
     GOPROXY: 'https://proxy.golang.org,direct',
   },
 
   vars: {
-    APP_IMAGE: 'docker.io/ghostsquad/s3-file-explorer:{{.GIT_COMMIT}}',
+    APP_IMAGE: 'docker.io/%s:{{.GIT_COMMIT}}' % [$.config_.project.repoShort],
     CURRENT_GO_VERSION: {
       sh: "asdf current golang | awk '{ print $2 }'",
     },
