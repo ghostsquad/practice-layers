@@ -118,12 +118,8 @@ local STRING_TYPE = 'string';
     ,
     "go:version:verify": t.Task('go:version:verify')
       .WithCmds([
-        {
-          task: 'go:version:set',
-        },
-        {
-          task: 'git:status:dirty',
-        },
+        t.CmdTask($.tasks['go:version:set'].name_),
+        t.CmdTask($.tasks['git:status:dirty'].name_),
       ])
     ,
     "http:metrics": t.Task('http:metrics')
@@ -132,7 +128,7 @@ local STRING_TYPE = 'string';
     "install-tools": t.Task('install-tools')
       .WithCmds([
         {
-          sh: 'echo Installing tools from tools.go',
+          cmd: 'echo Installing tools from tools.go',
           silent: true,
         },
         'asdf install',
