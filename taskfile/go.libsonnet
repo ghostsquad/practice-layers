@@ -65,11 +65,11 @@ local STRING_TYPE = 'string';
     build: t.Task('build')
       .WithCmds(
         |||
-          docker buildx build
-            --tag {{.APP_IMAGE}}
-            --build-arg GOLANG_BUILDER_IMAGE={{.GOLANG_BUILDER_IMAGE}}
-            --build-arg DEBIAN_IMAGE={{.DEBIAN_IMAGE}}
-            {{.BUILD_ARGS}}
+          docker buildx build \
+            --tag {{.APP_IMAGE}} \
+            --build-arg GOLANG_BUILDER_IMAGE={{.GOLANG_BUILDER_IMAGE}} \
+            --build-arg DEBIAN_IMAGE={{.DEBIAN_IMAGE}} \
+            {{.BUILD_ARGS}} \
             .
         |||,
       )
@@ -155,11 +155,12 @@ local STRING_TYPE = 'string';
     'test:integration': t.Task('test:integration')
       .WithCmds(
         |||
-          APP_IMAGE='{{.APP_IMAGE}}'
-          docker-compose up
-            --file docker-compose.tests.integration.yml
-            --exit-code-from test
-            --abort-on-container-exit
+          APP_IMAGE='{{.APP_IMAGE}}' \
+          docker-compose up \
+            --file docker-compose.tests.integration.yml \
+            --exit-code-from test \
+            --abort-on-container-exit \
+            ;
         |||
       )
       .WithDeps([
