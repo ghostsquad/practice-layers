@@ -41,7 +41,9 @@ local STRING_TYPE = 'string';
     DEBIAN_VERSION: 11.5,
     DEBIAN_VERSION_CODENAME: 'bullseye',
     EXPECTED_GO_VERSION: '1.19.2',
-    EXPECTED_GO_VERSION_SHORT: '{{slice (.EXPECTED_GO_VERSION | splitList \".\") 0 2 | join \".\"}}',
+    EXPECTED_GO_VERSION_SHORT: |||
+      {{slice (.EXPECTED_GO_VERSION | splitList ".") 0 2 | join "."}}
+    |||,
     GIT_BRANCH: {
       sh: |||
         if [ "${CI:-}" == "true" ]; then
@@ -82,7 +84,7 @@ local STRING_TYPE = 'string';
       .WithCmds('go mod download')
     ,
     "git:status:dirty": t.Task('git:status:dirty')
-      .WithCmds('[ -z \"$(git status --porcelain=v1 2>/dev/null)\" ]')
+      .WithCmds('[ -z "$(git status --porcelain=v1 2>/dev/null)" ]')
     ,
     "go:version:get": t.Task('go:version:get')
       .WithCmds('echo {{.CURRENT_GO_VERSION}}')
@@ -96,7 +98,9 @@ local STRING_TYPE = 'string';
       ])
       .WithVars({
         GO_VERSION: '{{.CLI_ARGS | default .EXPECTED_GO_VERSION}}',
-        GO_VERSION_SHORT: '{{slice (.GO_VERSION | splitList \".\") 0 2 | join \".\"}}',
+        GO_VERSION_SHORT: |||
+          {{slice (.GO_VERSION | splitList ".") 0 2 | join "."}}
+        |||,
       })
     ,
     "go:version:update": t.Task('go:version:update')
@@ -132,7 +136,9 @@ local STRING_TYPE = 'string';
           silent: true,
         },
         'asdf install',
-        "cat hack/tools.go | grep _ | awk -F'\"' '{print $2}' | xargs -tI % go install %",
+        |||
+          cat hack/tools.go | grep _ | awk -F'"' '{print $2}' | xargs -tI % go install %
+        |||,
       ])
       .WithDeps($.tasks.download.name_)
     ,
