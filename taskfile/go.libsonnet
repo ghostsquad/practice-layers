@@ -32,6 +32,9 @@ local STRING_TYPE = 'string';
     GOPROXY: 'https://proxy.golang.org,direct',
   },
 
+  # TODO Var order matters, but since this file is dynamically generated from jsonnet, we lose ordering
+  # Regenerating this file will result in problems. Don't forget to fix the ordering in the interm
+  # https://github.com/go-task/task/issues/1051
   vars+: {
     APP_IMAGE: 'docker.io/%s:{{.GIT_COMMIT}}' % [$.config_.project.repoShort],
     CURRENT_GO_VERSION: {
