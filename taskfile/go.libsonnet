@@ -172,7 +172,6 @@ local STRING_TYPE = 'string';
             BUILD_ARGS: '--output=type=docker',
           })
         ,
-        $.tasks['test:all'].name_
       ])
     ,
 
