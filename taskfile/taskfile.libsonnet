@@ -7,6 +7,22 @@ local OBJECT_TYPE = "object";
 local ArrayOrWrap(input) = if std.type(input) == ARRAY_TYPE then input else [input];
 
 {
+  version: "3",
+  tasks+: {
+    // TODO add a header comment to the yaml file that it's a generated file
+    // with instructions on how to regenerate it, e.g. task taskfile:gen
+    "taskfile:gen": $.Task("taskfile:gen")
+      .WithCmds(
+        // TODO these tools need an automated hook for installation
+        "jsonnet {{.JSONNET_INPUT_FILE}} | dasel -f - -r json -w yaml --pretty > '{{.OUTPUT_FILE}}'"
+      )
+      .WithVars({
+        JSONNET_INPUT_FILE: "taskfile.jsonnet",
+        OUTPUT_FILE: "Taskfile.yml",
+      })
+    ,
+  },
+
   Task(name):: {
     name_:: name,
     run: 'once',

@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "dependencies": [
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/cakehappens/lonely-mountain.git",
+          "subdir": ""
+        }
+      },
+      "version": "d26d20053b69b6ff65c98afe8e84cb9d51070359",
+      "sum": "eSS0VaPopLiOlcJM5WgaDD21ni/O1rrjl5NQOLx3b4g="
+    }
+  ],
+  "legacyImports": false
+}

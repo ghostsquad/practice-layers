@@ -9,31 +9,30 @@ local STRING_TYPE = 'string';
 //    local name = if std.type(tool) == STRING_TYPE then tool else tool.String();
 //    'go run %s' % [name],
 
-  config_:: {
-    project: {
+  config_+:: {
+    project+: {
       name: error "project.name required",
       owner: error "project.repoOwner required",
       repoShort: std.join("/", [self.owner, self.name]),
       repoLong: std.join("/", ["github.com", self.repoShort]),
     },
-    tools: {
+    tools+: {
       local tools = self,
 
-      gotestsum: {
+      gotestsum+: {
         src: 'gotest.tools/gotestsum',
         ref: 'latest',
       },
     },
   },
 
-  version: '3',
-  env: {
+  env+: {
     GO111MODULE: 'true',
     GOPRIVATE: std.join("/", ["github.com", $.config_.project.owner]),
     GOPROXY: 'https://proxy.golang.org,direct',
   },
 
-  vars: {
+  vars+: {
     APP_IMAGE: 'docker.io/%s:{{.GIT_COMMIT}}' % [$.config_.project.repoShort],
     CURRENT_GO_VERSION: {
       sh: "asdf current golang | awk '{ print $2 }'",
@@ -59,7 +58,7 @@ local STRING_TYPE = 'string';
     },
     GOLANG_BUILDER_IMAGE: 'golang:{{.CURRENT_GO_VERSION}}-{{.DEBIAN_VERSION_CODENAME}}',
   },
-  tasks: {
+  tasks+: {
     // TODO figure out how to dedup the key and parameter in an idiomatic way
     build: t.Task('build')
       .WithCmds(
