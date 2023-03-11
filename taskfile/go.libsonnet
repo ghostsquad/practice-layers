@@ -159,10 +159,11 @@ local STRING_TYPE = 'string';
       .WithCmds(
         |||
           APP_IMAGE='{{.APP_IMAGE}}' \
-          docker-compose up \
+          docker-compose \
             --file docker-compose.tests.integration.yml \
-            --exit-code-from test \
-            --abort-on-container-exit \
+              up \
+              --exit-code-from test \
+              --abort-on-container-exit \
             ;
         |||
       )
