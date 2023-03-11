@@ -27,7 +27,7 @@ local STRING_TYPE = 'string';
   },
 
   env+: {
-    GO111MODULE: 'true',
+    GO111MODULE: 'auto',
     GOPRIVATE: std.join("/", ["github.com", $.config_.project.owner]),
     GOPROXY: 'https://proxy.golang.org,direct',
   },
