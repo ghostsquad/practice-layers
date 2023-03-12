@@ -78,9 +78,7 @@ local STRING_TYPE = 'string';
       )
       .WithLabel('build with {{.BUILD_ARGS}}')
       .WithVars({
-        APP_VERSION: '{{.GIT_COMMIT}}',
         BUILD_ARGS: '{{.BUILD_ARGS}}',
-        IMAGE_TAG_PREFIX: "",
       })
     ,
     download: t.Task('download')
