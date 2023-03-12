@@ -17,7 +17,7 @@ local STRING_TYPE = 'string';
       repoShort: std.join("/", [self.owner, self.name]),
       repoLong: std.join("/", ["github.com", self.repoShort]),
     },
-    image: {
+    image+: {
       remoteNameNoTag: std.join("/", ["docker.io", config.project.repoShort])
     },
     tools+: {

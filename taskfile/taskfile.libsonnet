@@ -9,6 +9,7 @@ local ArrayOrWrap(input) = if std.type(input) == ARRAY_TYPE then input else [inp
 {
   version: "3",
   tasks+: {
+    // TODO onfailure, git restore output file
     "taskfile:gen": $.Task("taskfile:gen")
       .WithCmds([
         // TODO these tools need an automated hook for installation

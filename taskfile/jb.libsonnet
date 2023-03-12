@@ -3,7 +3,7 @@ local t = import "./taskfile.libsonnet";
 
 {
   config_+: {
-    jsonnetBundler: {
+    jsonnetBundler+: {
       pkgHome: "vendor",
     },
   },
