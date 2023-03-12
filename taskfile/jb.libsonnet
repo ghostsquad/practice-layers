@@ -9,10 +9,8 @@ local t = import "./taskfile.libsonnet";
   },
   env+: {
     local env = self,
-    jsonnetPath_+:: {
-      vendor: true,
-    },
-    JSONNET_PATH: std.join(":", lm.obj.keysAfterPrune(self.jsonnetPath_))
+    // TODO enable this string to be easily managed
+    JSONNET_PATH: $.config_.jsonnetBundler.pkgHome,
   },
   tasks+: {
     // TODO DRY these commands up

@@ -10,11 +10,15 @@ local STRING_TYPE = 'string';
 //    'go run %s' % [name],
 
   config_+:: {
+    local config = self,
     project+: {
       name: error "project.name required",
       owner: error "project.repoOwner required",
       repoShort: std.join("/", [self.owner, self.name]),
       repoLong: std.join("/", ["github.com", self.repoShort]),
+    },
+    image: {
+      remoteNameNoTag: std.join("/", ["docker.io", config.project.repoShort])
     },
     tools+: {
       local tools = self,
@@ -36,7 +40,7 @@ local STRING_TYPE = 'string';
   # Regenerating this file will result in problems. Don't forget to fix the ordering in the interm
   # https://github.com/go-task/task/issues/1051
   vars+: {
-    APP_IMAGE: 'docker.io/%s:{{.GIT_COMMIT}}' % [$.config_.project.repoShort],
+    APP_IMAGE: $.config_.image.remoteNameNoTag + ':{{.GIT_COMMIT}}',
     CURRENT_GO_VERSION: {
       sh: "asdf current golang | awk '{ print $2 }'",
     },
@@ -69,15 +73,16 @@ local STRING_TYPE = 'string';
       .WithCmds(
         |||
           docker buildx build \
-            --tag {{.APP_IMAGE}} \
+            --tag {{.PUSH_IMAGE}} \
             --build-arg GOLANG_BUILDER_IMAGE={{.GOLANG_BUILDER_IMAGE}} \
             --build-arg DEBIAN_IMAGE={{.DEBIAN_IMAGE}} \
-            {{.BUILD_ARGS}} \
+            {{trim .BUILD_ARGS}} \
             .
         |||,
       )
       .WithLabel('build with {{.BUILD_ARGS}}')
       .WithVars({
+        PUSH_IMAGE: '{{.PUSH_IMAGE | default .APP_IMAGE}}',
         BUILD_ARGS: '{{.BUILD_ARGS}}',
       })
     ,
@@ -144,14 +149,14 @@ local STRING_TYPE = 'string';
       t.CmdTask($.tasks.build.name_)
         .WithVars({
           BUILD_ARGS: |||
-            --platform linux/amd64
+            --platform linux/amd64 \
             --push
           |||,
         })
       )
     ,
     run: t.Task('run')
-      .WithCmds('go run ./...')
+      .WithCmds('go run -mod=readonly ./...')
     ,
     'test:integration': t.Task('test:integration')
       .WithCmds(
