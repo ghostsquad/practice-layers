@@ -8,7 +8,7 @@ t + {
     "taskfile:gen"+: {
       vars+: {
         JSONNET_INPUT_FILE: "taskfile_test.jsonnet",
-      }
-    }
-  }
+      },
+    },
+  },
 }
